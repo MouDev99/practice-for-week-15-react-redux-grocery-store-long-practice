@@ -1,17 +1,11 @@
 import CartItem from './CartItem';
 import './Cart.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { emptyTheCart, getCartItemsWithProduceDetails } from '../../store/cart';
 
 function Cart() {
-  const cart = {};
-  const produce = {};
-
-  const cartItems = Object.values(cart)
-    .map(item => {
-      return {
-        ...item,
-        ...produce[item.id]
-      };
-    });
+  const cartItems = useSelector(getCartItemsWithProduceDetails);
+  const dispatch = useDispatch();
 
   if (!cartItems || !cartItems.length) return (
     <div className="cart">
@@ -25,6 +19,7 @@ function Cart() {
       "Purchased the following:\n" +
       `${cartItems.map(item => `${item.count} of ${item.name}`).join('\n')}`
     );
+    dispatch(emptyTheCart());
   }
 
   return (
@@ -38,6 +33,6 @@ function Cart() {
       </form>
     </div>
   )
-}
+};
 
 export default Cart;
